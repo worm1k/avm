@@ -1,0 +1,4 @@
+push float(4.4)
+pop
+dump
+exit
