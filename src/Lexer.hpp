@@ -7,10 +7,9 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
-enum TokenType
-{
-};
+typedef std::vector<std::vector<std::string>> tTokens;
 
 class Lexer
 {
@@ -19,6 +18,7 @@ public:
     Lexer(int argc, char** argv);
     ~Lexer();
     void run();
+    const tTokens& getTokens();
 
 private:
     Lexer() = delete;
@@ -26,12 +26,15 @@ private:
     Lexer& operator=(const Lexer& obj) = delete;
 
     void readFromConsole();
-    void readFromFile(char** argv);
-    void validateLine(const std::string& line, int line_number);
+    void readFromFile(char* argv);
+    void validateLineAndPush(const std::string& line, int line_number);
     void addError(const std::string& error);
 
-    std::vector<std::vector<std::string>> tokens_;
+
+    tTokens tokens_;
     std::string errors_;
+    std::function<void()> readInputFunction_;
+
 
 };
 

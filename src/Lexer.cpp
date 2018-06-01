@@ -12,10 +12,13 @@
 Lexer::Lexer(int argc, char** argv)
 {
     if (argc == 1) {
-        readFromConsole();
+        readInputFunction_ = std::bind(&Lexer::readFromConsole, this);
     }
     else if (argc == 2) {
-        readFromFile(argv);
+        if (std::string("/dev/zero") == argv[1]) {
+            throw LexerException("EricException: the best place to put /dev/zero is up your ass");
+        }
+        readInputFunction_ = std::bind(&Lexer::readFromFile, this, argv[1]);
     }
     else {
         throw LexerException("LexerException: Invalid number of arguments");
@@ -27,6 +30,7 @@ Lexer::~Lexer()
 
 void Lexer::readFromConsole()
 {
+    std::cout << "reading from console" << std::endl;
     std::string line;
     int line_number = 1;
 
@@ -34,7 +38,7 @@ void Lexer::readFromConsole()
     {
         if (line == ";;")
             break ;
-        validateLine(line, line_number);
+        validateLineAndPush(line, line_number);
         ++line_number;
     }
 
@@ -47,15 +51,16 @@ void Lexer::readFromConsole()
     }
 }
 
-void Lexer::readFromFile(char** argv)
+void Lexer::readFromFile(char* argv)
 {
-    std::ifstream infile(argv[1]);
+    std::cout << "reading from file" << std::endl;
+    std::ifstream infile(argv);
     std::string line;
     int line_number = 1;
 
     while (std::getline(infile, line))
     {
-        validateLine(line, line_number);
+        validateLineAndPush(line, line_number);
         ++line_number;
     }
 
@@ -68,7 +73,7 @@ void Lexer::readFromFile(char** argv)
     }
 }
 
-void Lexer::validateLine(const std::string& line, int line_number)
+void Lexer::validateLineAndPush(const std::string& line, int line_number)
 {
     std::regex operation_no_args("^\\s*(pop|dump|add|sub|mul|div|mod|print|exit)\\s*(?:;.*)?$");
     std::regex operation_with_int("^\\s*(push|assert)\\s+(int8|int16|int32)\\(([-]?\\d+)\\)\\s*(?:;.*)?$");
@@ -78,15 +83,19 @@ void Lexer::validateLine(const std::string& line, int line_number)
 
     std::smatch line_match;
     if (regex_search(line, line_match, operation_no_args)) {
+//        std::cout << "no_args" << std::endl;
         tokens_.push_back({line_match[1].str()});
     }
     else if (regex_search(line, line_match, operation_with_int) || regex_search(line, line_match, operation_with_float)) {
+//        std::cout << "with_args" << std::endl;
         tokens_.push_back({line_match[1].str(), line_match[2].str(), line_match[3].str()});
     }
     else if (!regex_search(line, line_match, comment) && !regex_search(line, line_match, empty_line)) {
         addError(std::string("LexerException: Invalid line:") + std::to_string(line_number) + " " + line);
     }
-    // else { do nothing }
+    else {
+//        std::cout << "comment" << std::endl;
+    }
 }
 
 void Lexer::addError(const std::string& error)
@@ -102,13 +111,17 @@ void Lexer::addError(const std::string& error)
 
 void Lexer::run()
 {
-    std::cout << "==============" << std::endl;
-    std::cout << "Tokens output:" << std::endl;
-    for (auto& line: tokens_)
-    {
-        for (auto& token: line) {
-            std::cout << token << " ";
-        }
-        std::cout << std::endl;
-    }
+    readInputFunction_();
+//    std::cout << tokens_.size() << std::endl;
+//    for (auto& line: tokens_) {
+//        for (auto& token : line) {
+//            std::cout << token << " ";
+//        }
+//        std::cout << '\n';
+//    }
+}
+
+const tTokens& Lexer::getTokens()
+{
+    return tokens_;
 }
