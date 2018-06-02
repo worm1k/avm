@@ -7,6 +7,7 @@
 
 #include "Lexer.hpp"
 #include <iostream>
+#include <limits>
 
 class Parser {
 
@@ -22,20 +23,14 @@ private:
     Parser& operator=(const Parser& obj) = delete;
 
     void validateLine(const std::vector<std::string>& line);
-    template<class T> void validateIntegral(const std::string& line);
+    template<class T> void validateIntegral(const std::string& value);
     void addError(const std::string& error);
+    void checkExit(const std::string& operation);
 
     const tTokens& tokens_;
     std::string errors_;
 };
 
-
-template<class T>
-void Parser::validateIntegral(const std::string& line)
-{
-    std::cout << "inside validateIntegral: ";
-    std::cout << typeid(T).name() << std::endl;
-}
 
 
 #endif //AVM_PARSER_HPP

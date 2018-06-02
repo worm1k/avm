@@ -68,9 +68,6 @@ void Lexer::readFromFile(char* argv)
     {
         throw LexerException("LexerException: No input provided");
     }
-    if (!errors_.empty()) {
-        throw LexerException(errors_.c_str());
-    }
 }
 
 void Lexer::validateLineAndPush(const std::string& line, int line_number)
@@ -94,7 +91,7 @@ void Lexer::validateLineAndPush(const std::string& line, int line_number)
         addError(std::string("LexerException: Invalid line:") + std::to_string(line_number) + " " + line);
     }
     else {
-//        std::cout << "comment" << std::endl;
+        // do nothing
     }
 }
 
@@ -112,13 +109,9 @@ void Lexer::addError(const std::string& error)
 void Lexer::run()
 {
     readInputFunction_();
-//    std::cout << tokens_.size() << std::endl;
-//    for (auto& line: tokens_) {
-//        for (auto& token : line) {
-//            std::cout << token << " ";
-//        }
-//        std::cout << '\n';
-//    }
+    if (!errors_.empty()) {
+        throw LexerException(errors_.c_str());
+    }
 }
 
 const tTokens& Lexer::getTokens()
