@@ -27,6 +27,7 @@ public:
 
 private:
     const std::string str_value_;
+    T num_value_;
     const int precision_;
     const eOperandType type_;
 };

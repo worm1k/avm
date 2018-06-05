@@ -1,4 +1,6 @@
 #include "Machine.hpp"
+#include "OperandFactory.hpp"
+#include "Operand.hpp"
 
 #include <iostream>
 
@@ -12,10 +14,10 @@ Machine::Machine(const tTokens& tokens)
           {"double", DOUBLE}
       }
     , op_map_ {
-          {"push", &Machine::push},
+          //{"push", &Machine::push},
           {"pop", &Machine::pop},
           {"dump", &Machine::dump},
-          {"assert", &Machine::assert},
+          //{"assert", &Machine::assert},
           {"add", &Machine::add},
           {"sub", &Machine::sub},
           {"mul", &Machine::mul},
@@ -27,36 +29,61 @@ Machine::Machine(const tTokens& tokens)
 
 void Machine::run()
 {
-//    for (auto& elem : types_map_)
-//    {
-//        std::cout << elem.first << " " << elem.second << std::endl;
-//    }
-
+    for (auto& line : tokens_) {
+        if (line[0] == "push") {
+            push(line[1], line[2]);
+        }
+        else if (line[0] == "assert") {
+            assert(line[1], line[2]);
+        }
+        else if (line[0] == "exit"){
+            // do nothing
+        }
+        else {
+            (this->*op_map_[line[0]])();
+        }
+    }
 }
 
 
-void Machine::push()
+void Machine::push(const std::string& type, const std::string& value)
 {
-    std::cout << "push\n";
+    std::cout << "push " << type << " " << value << "\n";
+    eOperandType etype = types_map_[type];
+    deque_.push_back(OperandFactory::getInstance().makeOperand(etype, value));
 }
 
 void Machine::pop()
 {
-    std::cout << "pop\n";}
+    std::cout << "pop\n";
+}
 
 void Machine::dump()
 {
     std::cout << "dump\n";
+    for (auto it = deque_.rbegin(); it != deque_.rend(); ++it) {
+        std::cout << (*it)->toString() << "\n";
+    }
 }
 
-void Machine::assert()
+void Machine::assert(const std::string& type, const std::string& value)
 {
-    std::cout << "assert\n";
+    std::cout << "assert " << type << " " << value << "\n";
 }
 
 void Machine::add()
 {
     std::cout << "add\n";
+    if (deque_.size() < 2) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = *(deque_.end() - 2);
+    deque_.pop_back();
+    deque_.pop_back();
+    deque_.push_back(*a + *b);
+    delete a;
+    delete b;
 }
 
 void Machine::sub()
