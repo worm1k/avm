@@ -13,28 +13,26 @@ typedef std::vector<std::vector<std::string>> tTokens;
 
 class Lexer
 {
-
 public:
     Lexer(int argc, char** argv);
     ~Lexer();
+
     void run();
     const tTokens& getTokens();
 
-private:
-    Lexer() = delete;
-    Lexer(const Lexer& obj) = delete;
-    Lexer& operator=(const Lexer& obj) = delete;
+    Lexer()                        = delete;
+    Lexer(const Lexer&)            = delete;
+    Lexer& operator=(const Lexer&) = delete;
 
+private:
     void readFromConsole();
     void readFromFile(char* argv);
     void validateLineAndPush(const std::string& line, int line_number);
     void addError(const std::string& error);
 
-
     tTokens tokens_;
     std::string errors_;
     std::function<void()> readInputFunction_;
-
 
 };
 

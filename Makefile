@@ -24,14 +24,15 @@ INC_DIR  = src
 SRC_DIR  = src
 SRC      = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
 
-INC_NAME =              Lexer.hpp \
-                        Parser.hpp \
-
+#INC_NAME =              Lexer.hpp \
+#                        Parser.hpp \
 
 SRC_NAME =              main.cpp \
                         Lexer.cpp \
+                        LexerException.cpp \
+                        OperandFactory.cpp \
                         Parser.cpp \
-                        LexerException.cpp
+                        Machine.cpp
 # add .cpp file ---->
 
 ################################################################################
@@ -48,6 +49,7 @@ $(BIN_NAME): $(OBJ)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 		$(CC) -c $(CFLAGS) $? -o $@
+#		$(CC) $(INC_DIR) -c $< -o $@ -MD -MF $(@:.o=.d)
 
 $(OBJ_DIR):
 		mkdir $(OBJ_DIR)

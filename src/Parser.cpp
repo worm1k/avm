@@ -23,14 +23,13 @@ void Parser::printTokens()
         for (auto& token : line) {
             std::cout << token << " ";
         }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
 }
 
 void Parser::run()
 {
     std::cout << "======== Parsing ========" << std::endl;
-    std::cout << tokens_.size() << std::endl;
     printTokens();
 
     for (auto& line : this->tokens_) {
@@ -41,6 +40,7 @@ void Parser::run()
             checkExit(line[0]);
         }
     }
+    std::cout << "======== Parsed =========" << std::endl;
 }
 
 void Parser::validateLine(const std::vector<std::string>& line)
@@ -55,10 +55,10 @@ void Parser::validateLine(const std::vector<std::string>& line)
         validateIntegral<int32_t>(line[2]);
     }
     else if (line[1] == "float") {
-        validateIntegral<float>(line[2]);
+        validateFloat<float>(line[2]);
     }
     else if (line[1] == "double") {
-        validateIntegral<double>(line[2]);
+        validateFloat<double>(line[2]);
     }
     else {
         // thorw sth
@@ -68,7 +68,7 @@ void Parser::validateLine(const std::vector<std::string>& line)
 template<class T> // int8 || int16 || int32
 void Parser::validateIntegral(const std::string& value)
 {
-    std::cout << "inside validateIntegral for INTs: ";
+    std::cout << "inside validateIntegral: ";
     std::cout << typeid(T).name() << std::endl;
     try {
         long long time_ago = std::stoll(value);
@@ -85,34 +85,15 @@ void Parser::validateIntegral(const std::string& value)
     }
 }
 
-template<>
-void Parser::validateIntegral<double>(const std::string& value)
+template<class T> // float || double
+void Parser::validateFloat(const std::string& value)
 {
-    std::cout << "inside validateIntegral for Doubles: ";
-//    std::cout << typeid(T).name() << std::endl;
+    std::cout << "inside validateFloat: ";
+    std::cout << typeid(T).name() << std::endl;
     try {
         long double time_ago = std::stold(value);
-        double min = std::numeric_limits<double>::min();
-        double max = std::numeric_limits<double>::max();
-
-        if (time_ago < min || max < time_ago) {
-            errors_ += "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-        }
-    } catch (std::invalid_argument& e) {
-        this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
-    } catch (std::out_of_range& e) {
-        this->errors_ += "std::out_of_range: Exception on value \"" + value + "\": " + e.what();
-    }
-}
-
-template<>
-void Parser::validateIntegral<float>(const std::string& value)
-{
-    std::cout << "inside validateIntegral for FLOATs: ";
-    try {
-        long double time_ago = std::stoll(value);
-        float min = std::numeric_limits<float>::min();
-        float max = std::numeric_limits<float>::max();
+        T min = std::numeric_limits<T>::min();
+        T max = std::numeric_limits<T>::max();
 
         if (time_ago < min || max < time_ago) {
             errors_ += "ParserException: \"" + value + "\" is out of int8 boundaries.\n";

@@ -2,6 +2,7 @@
 #include "Lexer.hpp"
 #include "LexerException.hpp"
 #include "Parser.hpp"
+#include "Machine.hpp"
 
 #include <iostream>
 #include <string>
@@ -13,6 +14,8 @@ int main(int argc, char** argv)
         lexer.run();
         Parser parser(lexer.getTokens());
         parser.run();
+        Machine machine(lexer.getTokens());
+        machine.run();
     } catch (const LexerException& e) {
         std::cout << e.what() << std::endl;
     }

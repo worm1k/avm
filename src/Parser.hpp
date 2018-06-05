@@ -9,28 +9,28 @@
 #include <iostream>
 #include <limits>
 
-class Parser {
-
+class Parser
+{
 public:
     Parser(const tTokens& tokens);
     ~Parser();
+
     void run();
     void printTokens();
 
-private:
-    Parser() = delete;
-    Parser(const Parser& obj) = delete;
-    Parser& operator=(const Parser& obj) = delete;
+    Parser()                         = delete;
+    Parser(const Parser&)            = delete;
+    Parser& operator=(const Parser&) = delete;
 
+private:
     void validateLine(const std::vector<std::string>& line);
     template<class T> void validateIntegral(const std::string& value);
+    template<class T> void validateFloat(const std::string& value);
     void addError(const std::string& error);
     void checkExit(const std::string& operation);
 
     const tTokens& tokens_;
     std::string errors_;
 };
-
-
 
 #endif //AVM_PARSER_HPP
