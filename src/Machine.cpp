@@ -11,6 +11,18 @@ Machine::Machine(const tTokens& tokens)
           {"float", FLOAT},
           {"double", DOUBLE}
       }
+    , op_map_ {
+          {"push", &Machine::push},
+          {"pop", &Machine::pop},
+          {"dump", &Machine::dump},
+          {"assert", &Machine::assert},
+          {"add", &Machine::add},
+          {"sub", &Machine::sub},
+          {"mul", &Machine::mul},
+          {"div", &Machine::div},
+          {"mod", &Machine::mod},
+          {"print", &Machine::print}
+      }
 {}
 
 void Machine::run()
@@ -19,6 +31,56 @@ void Machine::run()
 //    {
 //        std::cout << elem.first << " " << elem.second << std::endl;
 //    }
-    for
 
 }
+
+
+void Machine::push()
+{
+    std::cout << "push\n";
+}
+
+void Machine::pop()
+{
+    std::cout << "pop\n";}
+
+void Machine::dump()
+{
+    std::cout << "dump\n";
+}
+
+void Machine::assert()
+{
+    std::cout << "assert\n";
+}
+
+void Machine::add()
+{
+    std::cout << "add\n";
+}
+
+void Machine::sub()
+{
+    std::cout << "sub\n";
+}
+
+void Machine::mul()
+{
+    std::cout << "mul\n";
+}
+
+void Machine::div()
+{
+    std::cout << "div\n";
+}
+
+void Machine::mod()
+{
+    std::cout << "mod\n";
+}
+
+void Machine::print()
+{
+    std::cout << "print\n";
+}
+
