@@ -11,6 +11,9 @@ public:
     Operand(const std::string value, eOperandType type);
     ~Operand();
 
+    template <class Lambda>
+    const IOperand* operation(IOperand const& x, IOperand const& y, Lambda func) const;
+
     const IOperand* operator+(IOperand const& rhs) const;
     const IOperand* operator-(IOperand const& rhs) const;
     const IOperand* operator*(IOperand const& rhs) const;

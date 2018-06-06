@@ -1,4 +1,6 @@
-﻿#include "Operand.hpp"
+﻿
+#include "MachineException.hpp"
+#include "Operand.hpp"
 #include "OperandFactory.hpp"
 
 #include <algorithm>
@@ -16,95 +18,60 @@ Operand<T>::Operand(const std::string value, eOperandType type)
 template <class T>
 Operand<T>::~Operand()
 {}
-/*
-try {
-    long long time_ago = std::stoll(value);
-    T min = std::numeric_limits<T>::min();
-    T max = std::numeric_limits<T>::max();
 
-    if (time_ago < min || max < time_ago) {
-        errors_ += "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-    }
-} catch (std::invalid_argument& e) {
-    this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
-} catch (std::out_of_range& e) {
-    this->errors_ += "std::out_of_range: Exception on value \"" + value + "\": " + e.what();
-}
-*/
 template <class T>
-const IOperand* Operand<T>::operator+(IOperand const& obj) const
+template <class Lambda>
+const IOperand* Operand<T>::operation(IOperand const& x, IOperand const& y, Lambda func) const
 {
-    eOperandType type = std::max(getType(), obj.getType());
-    long double a = std::stold(toString().c_str(), nullptr);
-    long double b = std::stold(obj.toString().c_str(), nullptr);
-    long double ldvalue = a + b;
+    eOperandType type = std::max(x.getType(), y.getType());
+    long double a = std::stold(x.toString().c_str(), nullptr);
+    long double b = std::stold(y.toString().c_str(), nullptr);
+    auto ldvalue = func(a, b);
     T min = std::numeric_limits<T>::min();
     T max = std::numeric_limits<T>::max();
     if (ldvalue < min || max < ldvalue) {
-        // throw "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
+        throw MachineException("MachineException: operation result value if out of limits");
     }
     T tvalue = static_cast<T>(ldvalue);
     std::string svalue = std::to_string(tvalue);
     std::cout << "type :" << type << std::endl;
     std::cout << "value:" << svalue << std::endl;
     return OperandFactory::getInstance().makeOperand(type, svalue);
+}
+
+template <class T>
+const IOperand* Operand<T>::operator+(IOperand const& obj) const
+{
+    return operation(*this, obj, [](long double a, long double b)
+                                 -> long double {return a + b;});
 }
 
 template <class T>
 const IOperand* Operand<T>::operator-(IOperand const& obj) const
 {
-    eOperandType type = std::max(getType(), obj.getType());
-    long double a = std::stold(toString().c_str(), nullptr);
-    long double b = std::stold(obj.toString().c_str(), nullptr);
-    long double ldvalue = a - b;
-    T min = std::numeric_limits<T>::min();
-    T max = std::numeric_limits<T>::max();
-    if (ldvalue < min || max < ldvalue) {
-        // throw "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-    }
-    T tvalue = static_cast<T>(ldvalue);
-    std::string svalue = std::to_string(tvalue);
-    std::cout << "type :" << type << std::endl;
-    std::cout << "value:" << svalue << std::endl;
-    return OperandFactory::getInstance().makeOperand(type, svalue);
+    return operation(*this, obj, [](long double a, long double b)
+                                 -> long double {return a - b;});
 }
 
 template <class T>
 const IOperand* Operand<T>::operator*(IOperand const& obj) const
 {
-    eOperandType type = std::max(getType(), obj.getType());
-    long double a = std::stold(toString().c_str(), nullptr);
-    long double b = std::stold(obj.toString().c_str(), nullptr);
-    long double ldvalue = a * b;
-    T min = std::numeric_limits<T>::min();
-    T max = std::numeric_limits<T>::max();
-    if (ldvalue < min || max < ldvalue) {
-        // throw "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-    }
-    T tvalue = static_cast<T>(ldvalue);
-    std::string svalue = std::to_string(tvalue);
-    std::cout << "type :" << type << std::endl;
-    std::cout << "value:" << svalue << std::endl;
-    return OperandFactory::getInstance().makeOperand(type, svalue);
+    return operation(*this, obj, [](long double a, long double b)
+                                 -> long double {return a * b;});
 }
 
 template <class T>
 const IOperand* Operand<T>::operator/(IOperand const& obj) const
 {
-    eOperandType type = std::max(getType(), obj.getType());
-    long double a = std::stold(toString().c_str(), nullptr);
-    long double b = std::stold(obj.toString().c_str(), nullptr);
-    long double ldvalue = a / b;
-    T min = std::numeric_limits<T>::min();
-    T max = std::numeric_limits<T>::max();
-    if (ldvalue < min || max < ldvalue) {
-        // throw "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-    }
-    T tvalue = static_cast<T>(ldvalue);
-    std::string svalue = std::to_string(tvalue);
-    std::cout << "type :" << type << std::endl;
-    std::cout << "value:" << svalue << std::endl;
-    return OperandFactory::getInstance().makeOperand(type, svalue);
+    return operation(*this, obj, [](long double a, long double b)
+                                 -> long double
+        {
+            if (b == 0) {
+                throw MachineException("MachineException: division by zero");
+            }
+            return a / b;
+        }
+    );
 }
 
 template <class T>
@@ -112,21 +79,17 @@ const IOperand* Operand<T>::operator%(IOperand const& obj) const
 {
     eOperandType type = std::max(getType(), obj.getType());
     if (type >= FLOAT) {
-        // throw
+        throw MachineException("MachineException: modulo with float numbers is forbidden");
     }
-    long long a = std::stoll(toString().c_str(), nullptr);
-    long long b = std::stoll(obj.toString().c_str(), nullptr);
-    long long ldvalue = a % b;
-    T min = std::numeric_limits<T>::min();
-    T max = std::numeric_limits<T>::max();
-    if (ldvalue < min || max < ldvalue) {
-        // throw "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
-    }
-    T tvalue = static_cast<T>(ldvalue);
-    std::string svalue = std::to_string(tvalue);
-    std::cout << "type :" << type << std::endl;
-    std::cout << "value:" << svalue << std::endl;
-    return OperandFactory::getInstance().makeOperand(type, svalue);
+    return operation(*this, obj, [](long double a, long double b)
+                                 -> long long
+        {
+            if (b == 0) {
+                throw MachineException("MachineException: modulo by zero");
+            }
+            return static_cast<long long>(a) % static_cast<long long>(b);
+        }
+    );
 }
 
 template <class T>
