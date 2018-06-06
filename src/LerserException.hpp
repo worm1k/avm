@@ -7,7 +7,7 @@
 
 #include <string>
 
-class LerserException
+class LerserException : public std::exception
 {
 public:
     LerserException(const std::string& what_message);

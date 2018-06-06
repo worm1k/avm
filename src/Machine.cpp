@@ -1,4 +1,5 @@
 #include "Machine.hpp"
+#include "MachineException.hpp"
 #include "OperandFactory.hpp"
 #include "Operand.hpp"
 
@@ -14,10 +15,8 @@ Machine::Machine(const tTokens& tokens)
           {"double", DOUBLE}
       }
     , op_map_ {
-          //{"push", &Machine::push},
           {"pop", &Machine::pop},
           {"dump", &Machine::dump},
-          //{"assert", &Machine::assert},
           {"add", &Machine::add},
           {"sub", &Machine::sub},
           {"mul", &Machine::mul},
@@ -27,7 +26,7 @@ Machine::Machine(const tTokens& tokens)
       }
 {}
 
-void Machine::run()
+void Machine::run() try
 {
     for (auto& line : tokens_) {
         if (line[0] == "push") {
@@ -43,8 +42,18 @@ void Machine::run()
             (this->*op_map_[line[0]])();
         }
     }
+} catch(MachineException& e) {
+    clear();
+    throw;
 }
 
+void Machine::clear()
+{
+    std::cout << "clear()" << std::endl;
+    for (auto& ptr : deque_) {
+        delete ptr;
+    }
+}
 
 void Machine::push(const std::string& type, const std::string& value)
 {
@@ -57,7 +66,7 @@ void Machine::pop()
 {
     std::cout << "pop\n";
     if (deque_.size() == 0) {
-        //throw sth
+        throw (MachineException("MachineException: pop on empty stack"));
     }
     auto a = *(deque_.end() - 1);
     deque_.pop_back();
@@ -76,23 +85,23 @@ void Machine::assert(const std::string& type, const std::string& value)
 {
     std::cout << "assert " << type << " " << value << "\n";
     if (deque_.size() == 0) {
-        //throw sth
+        throw (MachineException("MachineException: assert on empty stack"));
     }
     auto a = *(deque_.end() - 1);
     auto b = OperandFactory::getInstance().makeOperand(types_map_[type], value);
     if (a->getType() != b->getType() || a->toString() != b->toString()) {
-        std::cout << "assert error, should throw" << std::endl;
+        throw (MachineException("MachineException: assert failed"));
     }
-    else {
-        std::cout << "assert correct" << std::endl;
-    }
+//    else {
+//        std::cout << "assert correct" << std::endl;
+//    }
 }
 
 void Machine::add()
 {
     std::cout << "add\n";
     if (deque_.size() < 2) {
-        //throw sth
+        throw (MachineException("MachineException: add on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
@@ -107,7 +116,7 @@ void Machine::sub()
 {
     std::cout << "sub\n";
     if (deque_.size() < 2) {
-        //throw sth
+        throw (MachineException("MachineException: sub on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
@@ -122,7 +131,7 @@ void Machine::mul()
 {
     std::cout << "mul\n";
     if (deque_.size() < 2) {
-        //throw sth
+        throw (MachineException("MachineException: mul on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
@@ -137,7 +146,7 @@ void Machine::div()
 {
     std::cout << "div\n";
     if (deque_.size() < 2) {
-        //throw sth
+        throw (MachineException("MachineException: div on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
@@ -152,7 +161,7 @@ void Machine::mod()
 {
     std::cout << "mod\n";
     if (deque_.size() < 2) {
-        //throw sth
+        throw (MachineException("MachineException: mod on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
@@ -167,11 +176,11 @@ void Machine::print()
 {
     std::cout << "print\n";
     if (deque_.size() == 0) {
-        //throw sth
+        throw (MachineException("MachineException: print on empty stack"));
     }
     auto a = *(deque_.end() - 1);
     if (a->getPrecision() != INT8) {
-        // throw st else
+        throw (MachineException("MachineException: print on not Int8 value"));
     }
     char c = static_cast<char>(std::stoi(a->toString().c_str()));
     std::cout << "print:" << c << std::endl;

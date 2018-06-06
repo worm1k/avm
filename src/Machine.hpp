@@ -13,6 +13,7 @@ class Machine
 public:
     Machine(const tTokens& tokens);
     void run();
+    void clear();
 
     Machine()                                = delete;
     Machine(const Machine&)                  = delete;

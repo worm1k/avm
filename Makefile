@@ -30,9 +30,10 @@ SRC      = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
 SRC_NAME =              main.cpp \
                         Lexer.cpp \
                         LerserException.cpp \
+                        Machine.cpp \
+                        MachineException.cpp \
                         OperandFactory.cpp \
                         Parser.cpp \
-                        Machine.cpp
 # add .cpp file ---->
 
 ################################################################################

@@ -1,8 +1,9 @@
 
 #include "Lexer.hpp"
 #include "LerserException.hpp"
-#include "Parser.hpp"
 #include "Machine.hpp"
+#include "MachineException.hpp"
+#include "Parser.hpp"
 
 #include <iostream>
 #include <string>
@@ -18,8 +19,8 @@ int main(int argc, char** argv)
         machine.run();
     } catch (const LerserException& e) {
         std::cout << e.what() << std::endl;
-    }// catch (const FatalException& e) {
-//        machine.clear();
-//    }
+    } catch (const MachineException& e) {
+        std::cout << e.what() << std::endl;
+    }
     return 0;
 }
