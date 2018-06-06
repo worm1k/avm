@@ -94,8 +94,8 @@ void Machine::add()
     if (deque_.size() < 2) {
         //throw sth
     }
-    auto a = *(deque_.end() - 1);
-    auto b = *(deque_.end() - 2);
+    auto b = *(deque_.end() - 1);
+    auto a = *(deque_.end() - 2);
     deque_.pop_back();
     deque_.pop_back();
     deque_.push_back(*a + *b);
@@ -109,8 +109,8 @@ void Machine::sub()
     if (deque_.size() < 2) {
         //throw sth
     }
-    auto a = *(deque_.end() - 1);
-    auto b = *(deque_.end() - 2);
+    auto b = *(deque_.end() - 1);
+    auto a = *(deque_.end() - 2);
     deque_.pop_back();
     deque_.pop_back();
     deque_.push_back(*a - *b);
@@ -124,8 +124,8 @@ void Machine::mul()
     if (deque_.size() < 2) {
         //throw sth
     }
-    auto a = *(deque_.end() - 1);
-    auto b = *(deque_.end() - 2);
+    auto b = *(deque_.end() - 1);
+    auto a = *(deque_.end() - 2);
     deque_.pop_back();
     deque_.pop_back();
     deque_.push_back(*a * *b);
@@ -139,8 +139,8 @@ void Machine::div()
     if (deque_.size() < 2) {
         //throw sth
     }
-    auto a = *(deque_.end() - 1);
-    auto b = *(deque_.end() - 2);
+    auto b = *(deque_.end() - 1);
+    auto a = *(deque_.end() - 2);
     deque_.pop_back();
     deque_.pop_back();
     deque_.push_back(*a / *b);
@@ -154,8 +154,8 @@ void Machine::mod()
     if (deque_.size() < 2) {
         //throw sth
     }
-    auto a = *(deque_.end() - 1);
-    auto b = *(deque_.end() - 2);
+    auto b = *(deque_.end() - 1);
+    auto a = *(deque_.end() - 2);
     deque_.pop_back();
     deque_.pop_back();
     deque_.push_back(*a % *b);
