@@ -3,6 +3,8 @@
 //
 
 #include "Parser.hpp"
+#include "LerserException.hpp"
+
 #include <iostream>
 
 template<> void Parser::validateIntegral<double>(const std::string& value);
@@ -10,38 +12,41 @@ template<> void Parser::validateIntegral<float>(const std::string& value);
 
 Parser::Parser(const tTokens& tokens)
     : tokens_(tokens)
-{
-}
+{}
 
 Parser::~Parser()
 {}
 
-void Parser::printTokens()
-{
-    std::cout << "number of lines: " << this->tokens_.size() << std::endl;
-    for (auto& line : this->tokens_) {
-        for (auto& token : line) {
-            std::cout << token << " ";
-        }
-        std::cout << std::endl;
-    }
-}
+//void Parser::printTokens()
+//{
+//    std::cout << "number of lines: " << this->tokens_.size() << std::endl;
+//    for (auto& line : this->tokens_) {
+//        for (auto& token : line) {
+//            std::cout << token << " ";
+//        }
+//        std::cout << std::endl;
+//    }
+//}
 
 void Parser::run()
 {
     std::cout << "======== Parsing ========" << std::endl;
-    printTokens();
+
+    bool has_exit = false;
 
     for (auto& line : this->tokens_) {
         if (line[0] == "assert" || line[0] == "push") {
             validateLine(line);
         }
         else {
-            checkExit(line[0]);
+            checkExit(line[0], has_exit);
         }
     }
+    if (!has_exit) {
+        addError(std::string("ParserException: exit command is missing"));
+    }
     if (!errors_.empty()) {
-//        throw LexerException(errors_.c_str());
+        throw LerserException(errors_);
     }
     std::cout << "======== Parsed =========" << std::endl;
 }
@@ -64,7 +69,7 @@ void Parser::validateLine(const std::vector<std::string>& line)
         validateFloat<double>(line[2]);
     }
     else {
-        // thorw sth
+        addError(std::string("ParserException: unknown type: ") + line[1]);
     }
 }
 
@@ -75,16 +80,16 @@ void Parser::validateIntegral(const std::string& value)
     std::cout << typeid(T).name() << std::endl;
     try {
         long long time_ago = std::stoll(value);
-        T min = std::numeric_limits<T>::min();
+        T min = std::numeric_limits<T>::lowest();
         T max = std::numeric_limits<T>::max();
 
         if (time_ago < min || max < time_ago) {
-            errors_ += "ParserException: \"" + value + "\" is out of boundaries.\n";
+            addError(std::string("ParserException: \"") + value + "\" is out of boundaries.\n");
         }
     } catch (std::invalid_argument& e) {
-        this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
+        addError(std::string("std::invalid_argument Exception on value \"") + value +  "\": " + e.what());
     } catch (std::out_of_range& e) {
-        this->errors_ += "std::out_of_range: Exception on value \"" + value + "\": " + e.what();
+        addError(std::string("std::out_of_range: Exception on value \"") + value + "\": " + e.what());
     }
 }
 
@@ -99,12 +104,12 @@ void Parser::validateFloat(const std::string& value)
         T max = std::numeric_limits<T>::max();
 
         if (time_ago < min || max < time_ago) {
-            errors_ += "ParserException: \"" + value + "\" is out of boundaries.\n";
+            addError(std::string("ParserException: \"") + value + "\" is out of boundaries.\n");
         }
     } catch (std::invalid_argument& e) {
-        this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
+        addError(std::string("std::invalid_argument Exception on value \"") + value +  "\": " + e.what());
     } catch (std::out_of_range& e) {
-        this->errors_ += "std::out_of_range: Exception on value \"" + value + "\": " + e.what();
+        addError(std::string("std::out_of_range: Exception on value \"") + value + "\": " + e.what());
     }
 }
 
@@ -119,16 +124,14 @@ void Parser::addError(const std::string& error)
     }
 }
 
-void Parser::checkExit(const std::string &operation)
+void Parser::checkExit(const std::string &operation, bool& has_exit)
 {
-    static bool has_exit = false;
-
     if (operation == "exit") {
         if (!has_exit) {
             has_exit = true;
         }
         else {
-            // throw sth
+            addError(std::string("ParserException: more than one exit"));
         }
     }
 }

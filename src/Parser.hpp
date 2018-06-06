@@ -27,7 +27,7 @@ private:
     template<class T> void validateIntegral(const std::string& value);
     template<class T> void validateFloat(const std::string& value);
     void addError(const std::string& error);
-    void checkExit(const std::string& operation);
+    void checkExit(const std::string& operation, bool& has_exit);
 
     const tTokens& tokens_;
     std::string errors_;

@@ -29,7 +29,7 @@ SRC      = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
 
 SRC_NAME =              main.cpp \
                         Lexer.cpp \
-                        LexerException.cpp \
+                        LerserException.cpp \
                         OperandFactory.cpp \
                         Parser.cpp \
                         Machine.cpp

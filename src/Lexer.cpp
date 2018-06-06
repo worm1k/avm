@@ -3,7 +3,7 @@
 //
 
 #include "Lexer.hpp"
-#include "LexerException.hpp"
+#include "LerserException.hpp"
 #include <iostream>
 #include <regex>
 #include <sstream>
@@ -16,12 +16,12 @@ Lexer::Lexer(int argc, char** argv)
     }
     else if (argc == 2) {
         if (std::string("/dev/zero") == argv[1]) {
-            throw LexerException("EricException: the best place to put /dev/zero is up your ass");
+            throw LerserException("EricException: the best place to put /dev/zero is up your ass");
         }
         readInputFunction_ = std::bind(&Lexer::readFromFile, this, argv[1]);
     }
     else {
-        throw LexerException("LexerException: Invalid number of arguments");
+        throw LerserException("LexerException: Invalid number of arguments");
     }
 }
 
@@ -44,10 +44,7 @@ void Lexer::readFromConsole()
 
     if (line_number == 1)
     {
-        throw LexerException("LexerException: No input provided");
-    }
-    if (!errors_.empty()) {
-        throw LexerException(errors_.c_str());
+        throw LerserException("LexerException: No input provided");
     }
 }
 
@@ -66,7 +63,7 @@ void Lexer::readFromFile(char* argv)
 
     if (line_number == 1)
     {
-        throw LexerException("LexerException: No input provided");
+        throw LerserException("LexerException: No input provided");
     }
 }
 
@@ -110,7 +107,7 @@ void Lexer::run()
 {
     readInputFunction_();
     if (!errors_.empty()) {
-        throw LexerException(errors_.c_str());
+        throw LerserException(errors_);
     }
 }
 

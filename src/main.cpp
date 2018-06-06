@@ -1,6 +1,6 @@
 
 #include "Lexer.hpp"
-#include "LexerException.hpp"
+#include "LerserException.hpp"
 #include "Parser.hpp"
 #include "Machine.hpp"
 
@@ -16,8 +16,10 @@ int main(int argc, char** argv)
         parser.run();
         Machine machine(lexer.getTokens());
         machine.run();
-    } catch (const LexerException& e) {
+    } catch (const LerserException& e) {
         std::cout << e.what() << std::endl;
-    }
+    }// catch (const FatalException& e) {
+//        machine.clear();
+//    }
     return 0;
 }
