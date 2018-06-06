@@ -56,6 +56,12 @@ void Machine::push(const std::string& type, const std::string& value)
 void Machine::pop()
 {
     std::cout << "pop\n";
+    if (deque_.size() == 0) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    deque_.pop_back();
+    delete a;
 }
 
 void Machine::dump()
@@ -69,6 +75,17 @@ void Machine::dump()
 void Machine::assert(const std::string& type, const std::string& value)
 {
     std::cout << "assert " << type << " " << value << "\n";
+    if (deque_.size() == 0) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = OperandFactory::getInstance().makeOperand(types_map_[type], value);
+    if (a->getType() != b->getType() || a->toString() != b->toString()) {
+        std::cout << "assert error, should throw" << std::endl;
+    }
+    else {
+        std::cout << "assert correct" << std::endl;
+    }
 }
 
 void Machine::add()
@@ -89,25 +106,74 @@ void Machine::add()
 void Machine::sub()
 {
     std::cout << "sub\n";
+    if (deque_.size() < 2) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = *(deque_.end() - 2);
+    deque_.pop_back();
+    deque_.pop_back();
+    deque_.push_back(*a - *b);
+    delete a;
+    delete b;
 }
 
 void Machine::mul()
 {
     std::cout << "mul\n";
+    if (deque_.size() < 2) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = *(deque_.end() - 2);
+    deque_.pop_back();
+    deque_.pop_back();
+    deque_.push_back(*a * *b);
+    delete a;
+    delete b;
 }
 
 void Machine::div()
 {
     std::cout << "div\n";
+    if (deque_.size() < 2) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = *(deque_.end() - 2);
+    deque_.pop_back();
+    deque_.pop_back();
+    deque_.push_back(*a / *b);
+    delete a;
+    delete b;
 }
 
 void Machine::mod()
 {
     std::cout << "mod\n";
+    if (deque_.size() < 2) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    auto b = *(deque_.end() - 2);
+    deque_.pop_back();
+    deque_.pop_back();
+    deque_.push_back(*a % *b);
+    delete a;
+    delete b;
 }
 
 void Machine::print()
 {
     std::cout << "print\n";
+    if (deque_.size() == 0) {
+        //throw sth
+    }
+    auto a = *(deque_.end() - 1);
+    if (a->getPrecision() != INT8) {
+        // throw st else
+    }
+    char c = static_cast<char>(std::stoi(a->toString().c_str()));
+    std::cout << "print:" << c << std::endl;
 }
 

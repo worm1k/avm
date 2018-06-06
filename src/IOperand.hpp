@@ -8,7 +8,7 @@ enum eOperandType {
     INT16,
     INT32,
     FLOAT,
-    DOUBLE
+    DOUBLE,
 };
 
 class IOperand
