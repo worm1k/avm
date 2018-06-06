@@ -40,6 +40,9 @@ void Parser::run()
             checkExit(line[0]);
         }
     }
+    if (!errors_.empty()) {
+//        throw LexerException(errors_.c_str());
+    }
     std::cout << "======== Parsed =========" << std::endl;
 }
 
@@ -76,7 +79,7 @@ void Parser::validateIntegral(const std::string& value)
         T max = std::numeric_limits<T>::max();
 
         if (time_ago < min || max < time_ago) {
-            errors_ += "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
+            errors_ += "ParserException: \"" + value + "\" is out of boundaries.\n";
         }
     } catch (std::invalid_argument& e) {
         this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
@@ -92,11 +95,11 @@ void Parser::validateFloat(const std::string& value)
     std::cout << typeid(T).name() << std::endl;
     try {
         long double time_ago = std::stold(value);
-        T min = std::numeric_limits<T>::min();
+        T min = std::numeric_limits<T>::lowest();
         T max = std::numeric_limits<T>::max();
 
         if (time_ago < min || max < time_ago) {
-            errors_ += "ParserException: \"" + value + "\" is out of int8 boundaries.\n";
+            errors_ += "ParserException: \"" + value + "\" is out of boundaries.\n";
         }
     } catch (std::invalid_argument& e) {
         this->errors_ += "std::invalid_argument Exception on value \"" + value +  "\": " + e.what();
