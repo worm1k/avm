@@ -1,6 +1,5 @@
 ﻿
 #include "MachineException.hpp"
-#include "Operand.hpp"
 #include "OperandFactory.hpp"
 
 #include <algorithm>

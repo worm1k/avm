@@ -48,9 +48,14 @@ $(BIN_NAME): $(OBJ)
 		$(CC) $(CFLAGS) $(OBJ) -o $(BIN_NAME)
 		@echo "\033[33m'$(BIN_NAME)' compiling done.\033[0m"
 
+$(OBJ_DIR)/Machine.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(OBJ_DIR)
+		$(CC) -c $(CFLAGS) src/Machine.cpp -o $@
+
+$(OBJ_DIR)/OperandFactory.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(OBJ_DIR)
+		$(CC) -c $(CFLAGS) src/OperandFactory.cpp -o $@
+
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 		$(CC) -c $(CFLAGS) $? -o $@
-#		$(CC) $(INC_DIR) -c $< -o $@ -MD -MF $(@:.o=.d)
 
 $(OBJ_DIR):
 		mkdir $(OBJ_DIR)
