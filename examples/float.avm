@@ -1,3 +1,6 @@
-push float(-4.4)
-push double(-4.4)
+push int8(127)
+push int16(10)
+add
+dump
 exit
+;;

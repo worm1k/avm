@@ -5,26 +5,29 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
+#include <map>
 
 template <class T>
 Operand<T>::Operand(const std::string value, eOperandType type)
     : str_value_(value)
     , precision_(type)
     , type_(type)
-{
-}
+{}
 
 template <class T>
 Operand<T>::~Operand()
 {}
 
+// fix T.
 template <class T>
 template <class Lambda>
 const IOperand* Operand<T>::operation(IOperand const& x, IOperand const& y, Lambda func) const
 {
-    eOperandType type = std::max(x.getType(), y.getType());
-    long double a = std::stold(x.toString().c_str());
-    long double b = std::stold(y.toString().c_str());
+    if (x.getType() < y.getType()) {
+        return y + x;
+    }
+    long double a = std::stold(x.toString());
+    long double b = std::stold(y.toString());
     auto ldvalue = func(a, b);
     T min = std::numeric_limits<T>::lowest();
     T max = std::numeric_limits<T>::max();
@@ -35,7 +38,7 @@ const IOperand* Operand<T>::operation(IOperand const& x, IOperand const& y, Lamb
     std::string svalue = std::to_string(tvalue);
 //    std::cout << "type :" << type << std::endl;
 //    std::cout << "value:" << svalue << std::endl;
-    return OperandFactory::getInstance().makeOperand(type, svalue);
+    return OperandFactory::getInstance().makeOperand(type_, svalue);
 }
 
 template <class T>
