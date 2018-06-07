@@ -9,6 +9,7 @@ public:
     MachineException(const std::string& what_message);
     const char* what() const noexcept;
 
+    ~MachineException() noexcept;
     MachineException();
     MachineException(const MachineException& obj);
     MachineException& operator=(const MachineException&);

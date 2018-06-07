@@ -17,23 +17,23 @@ Parser::Parser(const tTokens& tokens)
 Parser::~Parser()
 {}
 
-//void Parser::printTokens()
-//{
-//    std::cout << "number of lines: " << this->tokens_.size() << std::endl;
-//    for (auto& line : this->tokens_) {
-//        for (auto& token : line) {
-//            std::cout << token << " ";
-//        }
-//        std::cout << std::endl;
-//    }
-//}
+void Parser::printTokens()
+{
+    std::cout << "number of lines: " << this->tokens_.size() << std::endl;
+    for (auto& line : this->tokens_) {
+        for (auto& token : line) {
+            std::cout << token << " ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 void Parser::run()
 {
     std::cout << "======== Parsing ========" << std::endl;
 
     bool has_exit = false;
-
+    printTokens();
     for (auto& line : this->tokens_) {
         if (line[0] == "assert" || line[0] == "push") {
             validateLine(line);
@@ -76,8 +76,8 @@ void Parser::validateLine(const std::vector<std::string>& line)
 template<class T> // int8 || int16 || int32
 void Parser::validateIntegral(const std::string& value)
 {
-    std::cout << "inside validateIntegral: ";
-    std::cout << typeid(T).name() << std::endl;
+//    std::cout << "inside validateIntegral: ";
+//    std::cout << typeid(T).name() << std::endl;
     try {
         long long time_ago = std::stoll(value);
         T min = std::numeric_limits<T>::lowest();
@@ -89,15 +89,15 @@ void Parser::validateIntegral(const std::string& value)
     } catch (std::invalid_argument& e) {
         addError(std::string("std::invalid_argument Exception on value \"") + value +  "\": " + e.what());
     } catch (std::out_of_range& e) {
-        addError(std::string("std::out_of_range: Exception on value \"") + value + "\": " + e.what());
+        addError(std::string("ParserException: value \"") + value + "\" is out of range");
     }
 }
 
 template<class T> // float || double
 void Parser::validateFloat(const std::string& value)
 {
-    std::cout << "inside validateFloat: ";
-    std::cout << typeid(T).name() << std::endl;
+//    std::cout << "inside validateFloat: ";
+//    std::cout << typeid(T).name() << std::endl;
     try {
         long double time_ago = std::stold(value);
         T min = std::numeric_limits<T>::lowest();
@@ -109,7 +109,7 @@ void Parser::validateFloat(const std::string& value)
     } catch (std::invalid_argument& e) {
         addError(std::string("std::invalid_argument Exception on value \"") + value +  "\": " + e.what());
     } catch (std::out_of_range& e) {
-        addError(std::string("std::out_of_range: Exception on value \"") + value + "\": " + e.what());
+        addError(std::string("ParserException: value \"") + value + "\" is out of range");
     }
 }
 

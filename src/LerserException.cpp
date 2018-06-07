@@ -28,3 +28,6 @@ const char* LerserException::what() const noexcept
 {
     return what_message_.c_str();
 }
+
+LerserException::~LerserException()
+{}

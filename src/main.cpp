@@ -17,10 +17,10 @@ int main(int argc, char** argv)
         parser.run();
         Machine machine(lexer.getTokens());
         machine.run();
-    } catch (const LerserException& e) {
-        std::cout << e.what() << std::endl;
-    } catch (const MachineException& e) {
-        std::cout << e.what() << std::endl;
+    } catch (std::exception& e) {
+        std::cout << std::endl << "*** " << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "Uncaught exception" << std::endl;
     }
     return 0;
 }

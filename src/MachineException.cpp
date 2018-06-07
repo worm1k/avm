@@ -25,3 +25,6 @@ const char* MachineException::what() const noexcept
     return what_message_.c_str();
 }
 
+MachineException::~MachineException()
+{}
+

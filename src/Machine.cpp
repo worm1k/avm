@@ -36,7 +36,7 @@ void Machine::run() try
             assert(line[1], line[2]);
         }
         else if (line[0] == "exit"){
-            // do nothing
+            clear();
         }
         else {
             (this->*op_map_[line[0]])();
@@ -92,6 +92,7 @@ void Machine::assert(const std::string& type, const std::string& value)
     if (a->getType() != b->getType() || a->toString() != b->toString()) {
         throw (MachineException("MachineException: assert failed"));
     }
+    delete b;
 //    else {
 //        std::cout << "assert correct" << std::endl;
 //    }

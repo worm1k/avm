@@ -13,6 +13,7 @@ public:
     LerserException(const std::string& what_message);
     const char* what() const noexcept;
 
+    ~LerserException();
     LerserException();
     LerserException(const LerserException& obj);
     LerserException& operator=(const LerserException&);

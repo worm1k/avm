@@ -30,7 +30,7 @@ Lexer::~Lexer()
 
 void Lexer::readFromConsole()
 {
-    std::cout << "reading from console" << std::endl;
+//    std::cout << "reading from console" << std::endl;
     std::string line;
     int line_number = 1;
 
@@ -50,7 +50,7 @@ void Lexer::readFromConsole()
 
 void Lexer::readFromFile(char* argv)
 {
-    std::cout << "reading from file" << std::endl;
+//    std::cout << "reading from file" << std::endl;
     std::ifstream infile(argv);
     std::string line;
     int line_number = 1;
@@ -98,7 +98,7 @@ void Lexer::addError(const std::string& error)
         errors_ = error;
     }
     else {
-        errors_ += "\n";
+        errors_ += "\n*** ";
         errors_ += error;
     }
 }

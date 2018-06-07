@@ -11,21 +11,16 @@
 #******************************************************************************#
 
 CC       = g++
-#CFLAGS   = -Wall -Wextra -Werror -std=c++11
-CFLAGS   = -Wall -Wextra -std=c++11
+CFLAGS   = -Wall -Wextra -Werror -std=c++11
 BIN_NAME = avm
 
 #********* -OBJ
 OBJ_DIR  = .obj
 OBJ      = $(subst .cpp,.o,$(subst $(SRC_DIR)/,$(OBJ_DIR)/,$(SRC)))
-INC_DIR  = src
 
 #********* -SRC
 SRC_DIR  = src
 SRC      = $(addprefix $(SRC_DIR)/, $(SRC_NAME))
-
-#INC_NAME =              Lexer.hpp \
-#                        Parser.hpp \
 
 SRC_NAME =              main.cpp \
                         Lexer.cpp \
@@ -48,10 +43,10 @@ $(BIN_NAME): $(OBJ)
 		$(CC) $(CFLAGS) $(OBJ) -o $(BIN_NAME)
 		@echo "\033[33m'$(BIN_NAME)' compiling done.\033[0m"
 
-$(OBJ_DIR)/Machine.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(OBJ_DIR)
+$(OBJ_DIR)/Machine.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(SRC_DIR)/Machine.cpp
 		$(CC) -c $(CFLAGS) src/Machine.cpp -o $@
 
-$(OBJ_DIR)/OperandFactory.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(OBJ_DIR)
+$(OBJ_DIR)/OperandFactory.o: $(SRC_DIR)/Operand.hpp $(SRC_DIR)/Operand.tpp $(SRC_DIR)/OperandFactory.cpp
 		$(CC) -c $(CFLAGS) src/OperandFactory.cpp -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
