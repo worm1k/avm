@@ -8,8 +8,7 @@
 #include <limits>
 #include <map>
 
-namespace {
-std::map<eOperandType, long double> lowest {
+static std::map<eOperandType, long double> lowest {
     {INT8, std::numeric_limits<int8_t>::lowest()},
     {INT16, std::numeric_limits<int16_t>::lowest()},
     {INT32, std::numeric_limits<int32_t>::lowest()},
@@ -17,14 +16,14 @@ std::map<eOperandType, long double> lowest {
     {DOUBLE, std::numeric_limits<double>::lowest()},
 };
 
-std::map<eOperandType, long double> maxest {
+static std::map<eOperandType, long double> maxest {
     {INT8, std::numeric_limits<int8_t>::max()},
     {INT16, std::numeric_limits<int16_t>::max()},
     {INT32, std::numeric_limits<int32_t>::max()},
     {FLOAT, std::numeric_limits<float>::max()},
     {DOUBLE, std::numeric_limits<double>::max()},
 };
-}
+
 
 template <class T>
 Operand<T>::Operand(const std::string value, eOperandType type)
