@@ -54,14 +54,14 @@ Machine::~Machine()
 
 void Machine::push(const std::string& type, const std::string& value)
 {
-    std::cout << "push " << type << " " << value << "\n";
+//    std::cout << "push " << type << " " << value << "\n";
     eOperandType etype = types_map_[type];
     deque_.push_back(OperandFactory::getInstance().makeOperand(etype, value));
 }
 
 void Machine::pop()
 {
-    std::cout << "pop\n";
+//    std::cout << "pop\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: pop on empty stack"));
     }
@@ -72,7 +72,7 @@ void Machine::pop()
 
 void Machine::dump()
 {
-    std::cout << "dump\n";
+//    std::cout << "dump\n";
     for (auto it = deque_.rbegin(); it != deque_.rend(); ++it) {
         std::cout << (*it)->toString() << "\n";
     }
@@ -80,7 +80,7 @@ void Machine::dump()
 
 void Machine::assert(const std::string& type, const std::string& value)
 {
-    std::cout << "assert " << type << " " << value << "\n";
+//    std::cout << "assert " << type << " " << value << "\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: assert on empty stack"));
     }
@@ -95,7 +95,7 @@ void Machine::assert(const std::string& type, const std::string& value)
 
 void Machine::add()
 {
-    std::cout << "add\n";
+//    std::cout << "add\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: add on less than 2 operands"));
     }
@@ -111,7 +111,7 @@ void Machine::add()
 
 void Machine::sub()
 {
-    std::cout << "sub\n";
+//    std::cout << "sub\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: sub on less than 2 operands"));
     }
@@ -127,7 +127,7 @@ void Machine::sub()
 
 void Machine::mul()
 {
-    std::cout << "mul\n";
+//    std::cout << "mul\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: mul on less than 2 operands"));
     }
@@ -143,7 +143,7 @@ void Machine::mul()
 
 void Machine::div()
 {
-    std::cout << "div\n";
+//    std::cout << "div\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: div on less than 2 operands"));
     }
@@ -159,7 +159,7 @@ void Machine::div()
 
 void Machine::mod()
 {
-    std::cout << "mod\n";
+//    std::cout << "mod\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: mod on less than 2 operands"));
     }
@@ -175,7 +175,7 @@ void Machine::mod()
 
 void Machine::print()
 {
-    std::cout << "print\n";
+//    std::cout << "print\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: print on empty stack"));
     }

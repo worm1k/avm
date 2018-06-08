@@ -1,5 +1,4 @@
-﻿
-#include "MachineException.hpp"
+﻿#include "MachineException.hpp"
 #include "OperandFactory.hpp"
 
 #include <algorithm>
@@ -42,19 +41,15 @@ template <class Lambda>
 const IOperand* Operand<T>::operation(IOperand const& x, IOperand const& y, Lambda func) const
 {
     eOperandType type = std::max(x.getType(), y.getType());
-
     long double a = std::stold(x.toString());
     long double b = std::stold(y.toString());
+
     auto value = func(a, b);
     auto min = lowest[type];
     auto max = maxest[type];;
     if (value < min || max < value) {
         throw MachineException("MachineException: operation result value out of limits");
     }
-//    T value = static_cast<T>(ldvalue);
-//    std::string svalue = std::to_string(tvalue);
-//    std::cout << "type :" << type << std::endl;
-//    std::cout << "value:" << svalue << std::endl;
     return OperandFactory::getInstance().makeOperand(type, toString(type, value));
 }
 
@@ -102,6 +97,7 @@ const IOperand* Operand<T>::operator%(IOperand const& obj) const
             if (b == 0) {
                 throw MachineException("MachineException: modulo by zero");
             }
+            std::cout << "fmod(a, b): " << std::fmod(a, b) << std::endl;
             return std::fmod(a, b);
         }
     );
@@ -143,7 +139,5 @@ const std::string Operand<T>::toString(eOperandType type, long double value) con
     default:
         res = std::to_string(static_cast<double>(value));
     }
-    // delete trailing zeros
-    res.erase(res.find_last_not_of('0') + 1, std::string::npos);
     return res;
 }
