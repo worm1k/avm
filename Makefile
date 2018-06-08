@@ -11,7 +11,7 @@
 #******************************************************************************#
 
 CC       = g++
-CFLAGS   = -Wall -Wextra -Werror -std=c++11
+CFLAGS   = -Wall -Wextra  -std=c++11
 BIN_NAME = avm
 
 #********* -OBJ

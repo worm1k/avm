@@ -26,7 +26,7 @@ Machine::Machine(const tTokens& tokens)
       }
 {}
 
-void Machine::run() try
+void Machine::run()
 {
     for (auto& line : tokens_) {
         if (line[0] == "push") {
@@ -36,20 +36,17 @@ void Machine::run() try
             assert(line[1], line[2]);
         }
         else if (line[0] == "exit"){
-            clear();
+            //clear();
         }
         else {
             (this->*op_map_[line[0]])();
         }
     }
-} catch(MachineException& e) {
-    clear();
-    throw;
 }
 
-void Machine::clear()
+Machine::~Machine()
 {
-//    std::cout << "clear()" << std::endl;
+    std::cout << "~Machine():" << std::endl;
     for (auto& ptr : deque_) {
         delete ptr;
     }
@@ -57,14 +54,14 @@ void Machine::clear()
 
 void Machine::push(const std::string& type, const std::string& value)
 {
-//    std::cout << "push " << type << " " << value << "\n";
+    std::cout << "push " << type << " " << value << "\n";
     eOperandType etype = types_map_[type];
     deque_.push_back(OperandFactory::getInstance().makeOperand(etype, value));
 }
 
 void Machine::pop()
 {
-//    std::cout << "pop\n";
+    std::cout << "pop\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: pop on empty stack"));
     }
@@ -75,7 +72,7 @@ void Machine::pop()
 
 void Machine::dump()
 {
-//    std::cout << "dump\n";
+    std::cout << "dump\n";
     for (auto it = deque_.rbegin(); it != deque_.rend(); ++it) {
         std::cout << (*it)->toString() << "\n";
     }
@@ -83,99 +80,102 @@ void Machine::dump()
 
 void Machine::assert(const std::string& type, const std::string& value)
 {
-//    std::cout << "assert " << type << " " << value << "\n";
+    std::cout << "assert " << type << " " << value << "\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: assert on empty stack"));
     }
     auto a = *(deque_.end() - 1);
     auto b = OperandFactory::getInstance().makeOperand(types_map_[type], value);
     if (a->getType() != b->getType() || a->toString() != b->toString()) {
+        delete b;
         throw (MachineException("MachineException: assert failed"));
     }
     delete b;
-//    else {
-//        std::cout << "assert correct" << std::endl;
-//    }
 }
 
 void Machine::add()
 {
-//    std::cout << "add\n";
+    std::cout << "add\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: add on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
+    auto res = *a + *b;
     deque_.pop_back();
     deque_.pop_back();
-    deque_.push_back(*a + *b);
     delete a;
     delete b;
+    deque_.push_back(res);
 }
 
 void Machine::sub()
 {
-//    std::cout << "sub\n";
+    std::cout << "sub\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: sub on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
+    auto res = *a - *b;
     deque_.pop_back();
     deque_.pop_back();
-    deque_.push_back(*a - *b);
     delete a;
     delete b;
+    deque_.push_back(res);
 }
 
 void Machine::mul()
 {
-//    std::cout << "mul\n";
+    std::cout << "mul\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: mul on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
+    auto res = *a * *b;
     deque_.pop_back();
     deque_.pop_back();
-    deque_.push_back(*a * *b);
     delete a;
     delete b;
+    deque_.push_back(res);
 }
 
 void Machine::div()
 {
-//    std::cout << "div\n";
+    std::cout << "div\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: div on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
+    auto res = *a / *b;
     deque_.pop_back();
     deque_.pop_back();
-    deque_.push_back(*a / *b);
     delete a;
     delete b;
+    deque_.push_back(res);
 }
 
 void Machine::mod()
 {
-//    std::cout << "mod\n";
+    std::cout << "mod\n";
     if (deque_.size() < 2) {
         throw (MachineException("MachineException: mod on less than 2 operands"));
     }
     auto b = *(deque_.end() - 1);
     auto a = *(deque_.end() - 2);
+    auto res = *a % *b;
     deque_.pop_back();
     deque_.pop_back();
-    deque_.push_back(*a % *b);
     delete a;
     delete b;
+    deque_.push_back(res);
 }
 
 void Machine::print()
 {
-//    std::cout << "print\n";
+    std::cout << "print\n";
     if (deque_.size() == 0) {
         throw (MachineException("MachineException: print on empty stack"));
     }
@@ -185,7 +185,7 @@ void Machine::print()
     }
     char c = static_cast<char>(std::stoi(a->toString().c_str()));
     if (32 <= c && c <= 126) {
-        std::cout << c;
+        std::cout << c << std::endl;
     }
 //    std::cout << "print:" << c << std::endl;
 }

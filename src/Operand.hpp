@@ -29,6 +29,8 @@ public:
     Operand& operator=(const Operand&) = delete;
 
 private:
+    const std::string toString(eOperandType type, long double value) const;
+
     const std::string str_value_;
     const int precision_;
     const eOperandType type_;

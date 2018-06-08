@@ -15,6 +15,7 @@ public:
     void run();
     void clear();
 
+    ~Machine();
     Machine()                                = delete;
     Machine(const Machine&)                  = delete;
     const Machine& operator=(const Machine&) = delete;
