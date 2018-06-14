@@ -6,6 +6,7 @@
 #define AVM_PARSER_HPP
 
 #include "Lexer.hpp"
+
 #include <iostream>
 #include <limits>
 

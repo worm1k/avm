@@ -25,6 +25,8 @@ public:
     Lexer& operator=(const Lexer&) = delete;
 
 private:
+    void checkBullShit(const char* devzero);
+    void printUsageMessage();
     void readFromConsole();
     void readFromFile(char* argv);
     void validateLineAndPush(const std::string& line, int line_number);

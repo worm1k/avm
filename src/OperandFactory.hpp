@@ -2,6 +2,7 @@
 #define OPERANDFACTORY_HPP
 
 #include "IOperand.hpp"
+
 #include <string>
 
 class OperandFactory
