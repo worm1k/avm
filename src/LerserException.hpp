@@ -2,8 +2,8 @@
 // Created by Artem Bykov on 5/31/18.
 //
 
-#ifndef AVM_LEXEREXCEPTION_HPP
-#define AVM_LEXEREXCEPTION_HPP
+#ifndef AVM_LERSEREXCEPTION_HPP
+#define AVM_LERSEREXCEPTION_HPP
 
 #include <string>
 
@@ -23,4 +23,4 @@ private:
 
 };
 
-#endif //AVM_LEXEREXCEPTION_HPP
+#endif //AVM_LERSEREXCEPTION_HPP

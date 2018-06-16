@@ -36,7 +36,7 @@ void Machine::run()
             assert(line[1], line[2]);
         }
         else if (line[0] == "exit"){
-            //clear();
+            // do nothing()
         }
         else {
             (this->*op_map_[line[0]])();
@@ -46,7 +46,7 @@ void Machine::run()
 
 Machine::~Machine()
 {
-    std::cout << "~Machine():" << std::endl;
+//    std::cout << "~Machine():" << std::endl;
     for (auto& ptr : deque_) {
         delete ptr;
     }

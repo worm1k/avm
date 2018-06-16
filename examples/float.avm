@@ -1,5 +1,5 @@
 push int8(127)
-push int16(10)
+push float(0.1)
 add
 dump
 exit

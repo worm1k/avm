@@ -30,10 +30,10 @@ void Parser::printTokens()
 
 void Parser::run()
 {
-    std::cout << "======== Parsing ========" << std::endl;
+//    std::cout << "======== Parsing ========" << std::endl;
 
     bool has_exit = false;
-    printTokens();
+//    printTokens();
     for (auto& line : this->tokens_) {
         if (line[0] == "assert" || line[0] == "push") {
             validateLine(line);
@@ -48,7 +48,7 @@ void Parser::run()
     if (!errors_.empty()) {
         throw LerserException(errors_);
     }
-    std::cout << "======== Parsed =========" << std::endl;
+//    std::cout << "======== Parsed =========" << std::endl;
 }
 
 void Parser::validateLine(const std::vector<std::string>& line)

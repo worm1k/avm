@@ -22,5 +22,7 @@ int main(int argc, char** argv)
     } catch (...) {
         std::cout << "Uncaught exception" << std::endl;
     }
+//    system("leaks avm --quiet");
+//    while(1);
     return 0;
 }
